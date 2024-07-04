@@ -1,34 +1,40 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
-import { Configuration, OpenAIApi } from 'openai';
+import axios from 'axios';
 
 dotenv.config();
 
 const router = express.Router();
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
+const unsplashAccessKey = process.env.UNSPLASH_ACCESS_KEY;
+const unsplashRoot = 'https://api.unsplash.com';
 
 router.route('/').get((req, res) => {
-  res.status(200).json({ message: 'Hello from DALL-E!' });
+  res.status(200).json({ message: 'Hello from Unsplash!' });
 });
 
 router.route('/').post(async (req, res) => {
   try {
     const { prompt } = req.body;
 
-    const aiResponse = await openai.createImage({
-      prompt,
-      n: 1,
-      size: '1024x1024',
-      response_format: 'b64_json',
-    });
+    const options = {
+      method: 'GET',
+      url: `${unsplashRoot}/search/photos`,
+      headers: {
+        Authorization: `Client-ID ${unsplashAccessKey}`
+      },
+      params: {
+        query: prompt,
+        per_page: 1
+      }
+    };
 
-    const image = aiResponse.data.data[0].b64_json;
-    res.status(200).json({ photo: image });
+    const response = await axios.request(options)
+    // console.log(response.data);
+    const imageData = response.data.results[0].urls.small;
+    // const encodedImgUrl = encodeURIComponent(imageData);
+    console.log(imageData); 
+    res.status(200).json({ photo: imageData});
   } catch (error) {
     console.error(error);
     res.status(500).send(error?.response.data.error.message || 'Something went wrong');

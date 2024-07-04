@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { preview } from '../assets';
 import { getRandomPrompt } from '../utils';
 import { FormField, Loader } from '../components';
+import Typewriter, { TypewriterClass } from 'typewriter-effect';
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch('https://dalle-arbb.onrender.com/api/v1/dalle', {
+        const response = await fetch('http://localhost:8080/api/v1/dalle', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -39,7 +40,7 @@ const CreatePost = () => {
         });
 
         const data = await response.json();
-        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+        setForm({ ...form, photo: data.photo });
       } catch (err) {
         alert(err);
       } finally {
@@ -56,7 +57,7 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await fetch('https://dalle-arbb.onrender.com/api/v1/post', {
+        const response = await fetch('http://localhost:8080/api/v1/post', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -78,10 +79,17 @@ const CreatePost = () => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto">
-      <div>
-        <h1 className="font-extrabold text-[#222328] text-[32px]">Create</h1>
-        <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">Generate an imaginative image through DALL-E AI and share it with the community</p>
+    <section className="max-w-7xl mx-auto  border-black bg-gradient-to-r from-black via-black to-blue-900">
+      <div className='flex flex-col justify-center'>
+        <h1 className="font-bold text-blue-400  text-start text-[64px] mt-10">Create</h1>
+        <div className=' text-[30px] font-semi-bold text-white max-w-[3/5]'>
+        <Typewriter 
+  onInit={(typewriter) => {
+    typewriter.typeString(`Generate an imaginative image through ArtGen-1.0 and share it with the community`)
+      .start();
+  }}/>
+        </div>
+
       </div>
 
       <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
@@ -143,7 +151,7 @@ const CreatePost = () => {
           <p className="mt-2 text-[#666e75] text-[14px]">** Once you have created the image you want, you can share it with others in the community **</p>
           <button
             type="submit"
-            className="mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            className="mt-3 text-black bg-blue-400 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
             {loading ? 'Sharing...' : 'Share with the Community'}
           </button>
