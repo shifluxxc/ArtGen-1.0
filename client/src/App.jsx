@@ -23,15 +23,15 @@ const App = () => {
 
     fetchUser();
   }, []);
-
+  
   const handleLogout = async () => {
     try {
-      await logout(); // Call logout method from authService
-      setUser(null); // Clear user state upon successful logout
+      await logout(() => setUser(null));
     } catch (error) {
       console.error('Error logging out:', error);
     }
   };
+
 
   return (
     <BrowserRouter>

@@ -34,11 +34,11 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="text-white bg-black min-h-screen p-5">
-      <h1 className="text-white text-2xl mb-5">Welcome, {user.displayName}</h1>
-      <img src={user.image} alt="Profile" className="mb-5 rounded-full w-32 h-32" />
-      <h2 className="text-white text-xl mb-3">Your Generated Images:</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="max-w-7xl mx-auto border-4 border-black bg-gradient-to-r from-black via-black to-blue-900">
+      <div className='flex flex-col items-center '>
+        <h1 className="font-extrabold text-white text-[32px] text-center ">Your Generated images</h1>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-9">
         {user.images && user.images.map((imageUrl, index) => (
           <img key={index} src={imageUrl} alt={`Generated ${index}`} className="w-full h-auto rounded" />
         ))}

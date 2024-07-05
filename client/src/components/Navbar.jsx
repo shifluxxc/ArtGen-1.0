@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { logout } from '../service/authService'; // Adjust path as per your project structure
 import { iconlogo } from '../assets';
+import { CiLogin } from "react-icons/ci";
 const baseUrl = 'http://localhost:8080'; 
 
 const Navbar = ({ user, onLogout }) => {
@@ -31,18 +32,20 @@ const Navbar = ({ user, onLogout }) => {
         </div>
       </Link>
 
-      <div className='flex justify-end px-4 gap-3'>
+      <div className='flex justify-end px-4 gap-3 items-center'>
         {user ? (
-          <div>
-            <Link to="/dashboard" className="font-inter font-medium bg-blue-400 text-black px-4 py-2 rounded-md">Dashboard</Link>
-            <button onClick={handleLogout} className="font-inter font-medium bg-red-400 text-black px-4 py-2 rounded-md ml-2">Logout</button>
+          <div className='flex justify-end gap-3'>
+            <Link to="/dashboard" className=" font-inter font-medium bg-blue-400 text-black px-4 py-2 rounded-md">Dashboard</Link>
+            <button onClick={handleLogout} className=" font-inter font-medium bg-red-400 text-black px-4 py-2 rounded-md ">Logout</button>
+            <Link to="/create-post" className="font-inter font-medium bg-blue-400 text-black px-4 py-2 rounded-md">Create</Link>
           </div>
         ) : (
-          <a href={`${baseUrl}/auth/google`} className="font-inter font-medium bg-blue-400 text-black px-4 py-2 rounded-md">Login with Google</a>
+            <div className='flex justify-start  items-center bg-blue-400 rounded-md px-4 gap-1'>
+              <a href={`${baseUrl}/auth/google`} className=" font-medium font-inter text-black py-2 ">Login</a>
+              <CiLogin className=' h-4 w-auto ' />
+              </div>
+          
         )}
-        <div>
-          <Link to="/create-post" className="font-inter font-medium bg-blue-400 text-black px-4 py-2 rounded-md">Create</Link>
-        </div>
       </div>
     </header>
   );

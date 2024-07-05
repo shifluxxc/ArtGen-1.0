@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="container mx-auto px-6 lg:px-20">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div className="mb-6 md:mb-0">
-            <h1 className="text-4xl font-bold">FIXIT</h1>
+            <h1 className="text-4xl font-bold">ArtGen-1.0</h1>
             <p className="mt-3 max-w-lg text-sm text-gray-400">
             ArtGen-1.0 is An language model designed to assist with various tasks and provide helpful responses to user queries.
             </p>
