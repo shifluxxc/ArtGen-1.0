@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import { preview } from '../assets';
 import { getRandomPrompt } from '../utils';
 import { FormField, Loader } from '../components';
-import Typewriter, { TypewriterClass } from 'typewriter-effect';
+import Typewriter from 'typewriter-effect';
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -29,17 +30,11 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch('http://localhost:8080/api/v1/dalle', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            prompt: form.prompt,
-          }),
-        });
+        const response = await axios.post('http://localhost:8080/api/v1/dalle', {
+          prompt: form.prompt,
+        }, { withCredentials: true });
 
-        const data = await response.json();
+        const data = response.data;
         setForm({ ...form, photo: data.photo });
       } catch (err) {
         alert(err);
@@ -57,15 +52,16 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:8080/api/v1/post', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ...form }),
-        });
+        await axios.post('http://localhost:8080/api/v1/post', {
+          name: form.name,
+          prompt: form.prompt,
+          photo: form.photo,
+        }, { withCredentials: true });
 
-        await response.json();
+        await axios.post('http://localhost:8080/add_image', {
+          imageUrl: form.photo,
+        }, { withCredentials: true });
+
         alert('Success');
         navigate('/');
       } catch (err) {
@@ -83,13 +79,13 @@ const CreatePost = () => {
       <div className='flex flex-col justify-center'>
         <h1 className="font-bold text-blue-400  text-start text-[64px] mt-10">Create</h1>
         <div className=' text-[30px] font-semi-bold text-white max-w-[3/5]'>
-        <Typewriter 
-  onInit={(typewriter) => {
-    typewriter.typeString(`Generate an imaginative image through ArtGen-1.0 and share it with the community`)
-      .start();
-  }}/>
+          <Typewriter 
+            onInit={(typewriter) => {
+              typewriter.typeString(`Generate an imaginative image through ArtGen-1.0 and share it with the community`)
+                .start();
+            }}
+          />
         </div>
-
       </div>
 
       <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
